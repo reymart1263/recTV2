@@ -89,7 +89,7 @@ export const OWNER_MILESTONES: Milestone[] = [
   {
     year: "2015",
     title: "Shop Grand Opening",
-    description: "Renato established his independent shop in Cavite, Philippines. Built a stellar reputation for delivering honest, affordable, and highly precise TV and motherboard repairs."
+    description: "Renato established his independent shop in Pasig City, Philippines. Built a stellar reputation for delivering honest, affordable, and highly precise TV and motherboard repairs."
   },
   {
     year: "2020",
@@ -103,7 +103,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "1",
     name: "Jaime Del Rosario",
     role: "Local Bar Owner",
-    location: "General Trias, Cavite",
+    location: "Nagpayong, Pasig City",
     comment: "Renato is our go-to guy for all our commercial videoke machines. Whenever we have a sound system issue, he fixes it in no time. Our customers always praise how clear our microphones sound, thanks to his audio tuning!",
     rating: 5,
     avatarSeed: "jaime"
@@ -112,7 +112,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "2",
     name: "Elena Santos-Cruz",
     role: "Homeowner",
-    location: "Dasmariñas, Cavite",
+    location: "Pinagbuhatan, Pasig City",
     comment: "Another shop told me my 55\" Smart TV was a write-off because of a broken mainboard. Renato took one look, replaced a tiny chip on the board, and had it running like brand new for a fraction of the cost. Highly recommended!",
     rating: 5,
     avatarSeed: "elena"
@@ -121,7 +121,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "3",
     name: "Mark Alcantara",
     role: "Church Coordinator",
-    location: "Imus, Cavite",
+    location: "Nagpayong, Pasig City",
     comment: "Our church's main amplifier was producing a horrible loud buzzing noise during services. Renato diagnosed a blown filter capacitor, replaced it, and calibrated our entire soundboard. The difference is night and day!",
     rating: 5,
     avatarSeed: "mark"
@@ -137,7 +137,7 @@ export const FAQS: FAQItem[] = [
   {
     category: "general",
     question: "Do you offer home service or pick-up?",
-    answer: "Yes, we offer on-site home service for TV diagnostics and videoke rentals in Cavite (including Imus, Bacoor, Dasma, and Gen. Trias). For complex board repairs, we highly recommend bringing the unit to our workshop, or we can pick it up for a minimal travel fee."
+    answer: "Yes, we offer on-site home service for TV diagnostics and videoke rentals in Pasig City and select nearby areas. For complex board repairs, we highly recommend bringing the unit to our workshop, or we can pick it up for a minimal travel fee."
   },
   {
     category: "tv-board",

@@ -1,258 +1,206 @@
 import React, { useState, useEffect } from "react";
-import { Sliders, Wrench, Clock, DollarSign, CheckCircle2, ChevronRight } from "lucide-react";
-import { motion } from "motion/react";
+import { Sliders, Clock, Wrench, ChevronRight, CheckCircle2 } from "lucide-react";
 
-interface DeviceOption {
+interface OptionGroup {
   id: string;
   name: string;
-  category: "tv-board" | "sound-system" | "videoke";
-  basePrice: number;
+  baseMinPrice: number;
+  baseMaxPrice: number;
+  timeline: string;
+  symptoms: { name: string; addMin: number; addMax: number }[];
 }
 
-interface BrandOption {
-  name: string;
-  multiplier: number;
+const PRICE_DATABASE: OptionGroup[] = [
+  {
+    id: "tv",
+    name: "Smart TV or Display Monitor",
+    baseMinPrice: 800,
+    baseMaxPrice: 1200,
+    timeline: "1 - 3 Days",
+    symptoms: [
+      { name: "Standby light is on, but screen won't boot", addMin: 0, addMax: 200 },
+      { name: "Black screen but audio works (Backlight Burnout)", addMin: 400, addMax: 800 },
+      { name: "Faulty ports, HDMI, or Wi-Fi connectivity errors", addMin: 200, addMax: 400 }
+    ]
+  },
+  {
+    id: "audio",
+    name: "Stereo Amplifier, Mixer, or Speakers",
+    baseMinPrice: 1200,
+    baseMaxPrice: 1800,
+    timeline: "2 - 4 Days",
+    symptoms: [
+      { name: "Loud humming, buzzing, or speaker static noise", addMin: 0, addMax: 300 },
+      { name: "One audio channel is weaker or completely dead", addMin: 300, addMax: 600 },
+      { name: "No power / dead unit (Blown supply capacitor/fuse)", addMin: 200, addMax: 400 }
+    ]
+  },
+  {
+    id: "videoke",
+    name: "Videoke Cabinet or Karaoke System",
+    baseMinPrice: 900,
+    baseMaxPrice: 1500,
+    timeline: "1 - 2 Days",
+    symptoms: [
+      { name: "High microphone squealing / feedback issues", addMin: 0, addMax: 200 },
+      { name: "Outdated songs / hard drive update requested", addMin: 300, addMax: 500 },
+      { name: "Coin acceptor slot is jammed or not registering", addMin: 150, addMax: 300 }
+    ]
+  }
+];
+
+interface QuoteCalculatorProps {
+  onNavigate: (page: string) => void;
 }
 
-interface SymptomOption {
-  name: string;
-  addedCost: number;
-  complexity: "Low" | "Medium" | "High";
-  duration: string;
-}
+export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
+  const [selectedEquip, setSelectedEquip] = useState<string>(PRICE_DATABASE[0].id);
+  const [selectedSymptomIdx, setSelectedSymptomIdx] = useState<number>(0);
+  
+  const [minPrice, setMinPrice] = useState<number>(1200);
+  const [maxPrice, setMaxPrice] = useState<number>(2000);
+  const [timeline, setTimeline] = useState<string>("1-3 Days");
 
-const DEVICES: DeviceOption[] = [
-  { id: "led-tv", name: "LED / LCD Smart TV", category: "tv-board", basePrice: 800 },
-  { id: "power-board", name: "Custom Circuit Board / PCB", category: "tv-board", basePrice: 600 },
-  { id: "stereo-amp", name: "Stereo Amplifier / Receiver", category: "sound-system", basePrice: 1200 },
-  { id: "pa-mixer", name: "Sound Mixer / Audio Console", category: "sound-system", basePrice: 1400 },
-  { id: "active-speaker", name: "Active Powered Speaker", category: "sound-system", basePrice: 900 },
-  { id: "videoke-box", name: "Commercial Videoke Cabinet", category: "videoke", basePrice: 1500 },
-  { id: "home-karaoke", name: "Home Karaoke Setup", category: "videoke", basePrice: 1000 }
-];
-
-const BRANDS: BrandOption[] = [
-  { name: "Samsung", multiplier: 1.2 },
-  { name: "LG", multiplier: 1.15 },
-  { name: "Sony", multiplier: 1.25 },
-  { name: "Sharp", multiplier: 1.1 },
-  { name: "Pioneer", multiplier: 1.3 },
-  { name: "Yamaha", multiplier: 1.3 },
-  { name: "Xenon / Kevler", multiplier: 1.05 },
-  { name: "Sakura / Crown", multiplier: 1.0 },
-  { name: "Generic / Unbranded", multiplier: 0.95 }
-];
-
-const SYMPTOMS: SymptomOption[] = [
-  { name: "No Power / Completely Dead (Blown Fuse/Power Board)", addedCost: 350, complexity: "Medium", duration: "1-2 Days" },
-  { name: "Sound Works, But Black Screen (Backlight LED Burnout)", addedCost: 950, complexity: "High", duration: "1-3 Days" },
-  { name: "Audio Distortion, Hum, Buzz, or Static Noise", addedCost: 400, complexity: "Medium", duration: "2 Days" },
-  { name: "Mic Feedback / Squealing & Poor Volume Tuning", addedCost: 200, complexity: "Low", duration: "1 Day" },
-  { name: "Outdated Songbook / Song List Update Required", addedCost: 300, complexity: "Low", duration: "1 Day" },
-  { name: "Jammed Coin Slot or Credit System Not Registering", addedCost: 250, complexity: "Low", duration: "1 Day" },
-  { name: "Burnt Main IC Chip or Corroded Circuit Board Lines", addedCost: 1200, complexity: "High", duration: "2-4 Days" }
-];
-
-export default function QuoteCalculator() {
-  const [selectedDevice, setSelectedDevice] = useState<string>(DEVICES[0].id);
-  const [selectedBrand, setSelectedBrand] = useState<string>(BRANDS[0].name);
-  const [selectedSymptom, setSelectedSymptom] = useState<string>(SYMPTOMS[0].name);
-
-  const [estimate, setEstimate] = useState({ minPrice: 0, maxPrice: 0, duration: "1-2 Days", complexity: "Medium" });
-
+  // Automatically recalculate estimate based on simple choices
   useEffect(() => {
-    const dev = DEVICES.find(d => d.id === selectedDevice) || DEVICES[0];
-    const brand = BRANDS.find(b => b.name === selectedBrand) || BRANDS[0];
-    const sym = SYMPTOMS.find(s => s.name === selectedSymptom) || SYMPTOMS[0];
+    const equip = PRICE_DATABASE.find(e => e.id === selectedEquip) || PRICE_DATABASE[0];
+    const symptom = equip.symptoms[selectedSymptomIdx] || equip.symptoms[0];
 
-    const rawCost = (dev.basePrice * brand.multiplier) + sym.addedCost;
-    
-    // Create a realistic range (e.g., +/- 10% of computed estimate)
-    const minPrice = Math.round((rawCost * 0.9) / 50) * 50;
-    const maxPrice = Math.round((rawCost * 1.1) / 50) * 50;
+    const finalMin = equip.baseMinPrice + symptom.addMin;
+    const finalMax = equip.baseMaxPrice + symptom.addMax;
 
-    setEstimate({
-      minPrice,
-      maxPrice,
-      duration: sym.duration,
-      complexity: sym.complexity
-    });
-  }, [selectedDevice, selectedBrand, selectedSymptom]);
+    setMinPrice(Math.round(finalMin / 50) * 50);
+    setMaxPrice(Math.round(finalMax / 50) * 50);
+    setTimeline(equip.timeline);
+  }, [selectedEquip, selectedSymptomIdx]);
 
-  const handleBook = () => {
-    const contactForm = document.getElementById("contact");
-    if (contactForm) {
-      contactForm.scrollIntoView({ behavior: "smooth" });
-    }
+  // Handle equipment change to reset symptom index
+  const handleEquipChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedEquip(e.target.value);
+    setSelectedSymptomIdx(0);
   };
 
+  const activeEquip = PRICE_DATABASE.find(e => e.id === selectedEquip) || PRICE_DATABASE[0];
+
   return (
-    <section id="calculator" className="py-20 bg-slate-950 text-white relative overflow-hidden">
-      {/* Visual neon grid background */}
+    <section className="py-16 sm:py-20 bg-slate-950 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
       
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative mx-auto max-w-7xl px-4 lg:px-6"
-      >
+      <div className="relative mx-auto max-w-7xl px-4 lg:px-6">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Informational Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs font-bold tracking-widest text-amber-400 uppercase bg-amber-950 border border-amber-800 px-3 py-1.5 rounded">
+          {/* Descriptive Column */}
+          <div className="lg:col-span-5 space-y-5">
+            <span className="text-xs font-bold tracking-widest text-blue-400 bg-blue-950 border border-blue-800 px-3 py-1.5 rounded">
               Interactive Estimator
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Calculate Your Approximate Repair Cost
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
+              Instant Repair Cost Estimator
             </h2>
             <p className="text-slate-300 leading-relaxed text-sm">
-              We believe in 100% honesty. Use this smart tool to get a transparent ballpark price calculation. Select your equipment type, choose your manufacturer brand, and pick the symptom you're experiencing.
+              We value transparent pricing. Select your appliance type and primary symptom below to get an instant, component-level repair cost estimation.
             </p>
 
             <div className="space-y-4 pt-4 border-t border-slate-800">
-              <div className="flex items-start gap-3">
-                <div className="rounded bg-emerald-500/10 p-1.5 text-emerald-400 mt-0.5">
-                  <CheckCircle2 className="h-4 w-4" />
-                </div>
+              <div className="flex items-start gap-3 text-xs text-slate-300">
+                <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white leading-snug">No Surprise Fees</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">All repair quotations include parts and labor. We never do extra work without your direct confirmation.</p>
+                  <strong className="text-white font-bold block">No surprise fees</strong>
+                  All cost estimates are ballpark ranges covering both parts and precision labor.
                 </div>
               </div>
-
-              <div className="flex items-start gap-3">
-                <div className="rounded bg-amber-500/10 p-1.5 text-amber-400 mt-0.5">
-                  <CheckCircle2 className="h-4 w-4" />
-                </div>
+              <div className="flex items-start gap-3 text-xs text-slate-300">
+                <CheckCircle2 className="h-4.5 w-4.5 text-blue-400 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white leading-snug">Genuine Parts Guaranteed</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">We source only high-grade premium components and original brand replacements to ensure longevity.</p>
+                  <strong className="text-white font-bold block">100% Free diagnostics</strong>
+                  If you bring your unit to our shop, checking and tracing the fault is completely free.
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Calculator Card Column */}
+          {/* Clean Calculator Card Column */}
           <div className="lg:col-span-7">
-            <div className="rounded border border-slate-800 bg-slate-900 p-6 sm:p-8 shadow-2xl relative">
-              <div className="absolute -top-3 -right-3 rounded bg-amber-500 px-3 py-1 text-[10px] font-bold tracking-widest text-slate-950 uppercase">
+            <div className="rounded border border-slate-800 bg-slate-900 p-6 sm:p-8 shadow-xl relative">
+              <div className="absolute -top-3 -right-3 rounded bg-blue-600 px-3 py-1 text-[9px] font-mono font-bold tracking-wider text-white uppercase">
                 Free Diagnostics
               </div>
               
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-5 mb-6">
-                <Sliders className="h-5 w-5 text-amber-400" />
-                <h3 className="text-lg font-bold">Interactive Cost Estimator</h3>
+              <div className="flex items-center gap-2.5 border-b border-slate-800 pb-4 mb-6">
+                <Sliders className="h-5 w-5 text-blue-400" />
+                <h3 className="text-base font-bold uppercase tracking-wider text-white">Select Your Options</h3>
               </div>
 
-              <div className="space-y-5">
-                {/* Device type selection */}
+              <div className="space-y-6">
+                {/* Step 1: Equipment */}
                 <div>
-                  <label htmlFor="device-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    1. Select Equipment / Appliance
+                  <label htmlFor="equip-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    1. Select Equipment Type
                   </label>
                   <select
-                    id="device-select"
-                    value={selectedDevice}
-                    onChange={(e) => setSelectedDevice(e.target.value)}
-                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    id="equip-select"
+                    value={selectedEquip}
+                    onChange={handleEquipChange}
+                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
-                    {DEVICES.map((d) => (
-                      <option key={d.id} value={d.id}>{d.name}</option>
+                    {PRICE_DATABASE.map((equip) => (
+                      <option key={equip.id} value={equip.id}>{equip.name}</option>
                     ))}
                   </select>
                 </div>
 
-                {/* Brand Selection */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="brand-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                      2. Manufacturer / Brand
-                    </label>
-                    <select
-                      id="brand-select"
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-                    >
-                      {BRANDS.map((b) => (
-                        <option key={b.name} value={b.name}>{b.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Complexity indicator */}
-                  <div>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                      Diagnostic Difficulty
-                    </span>
-                    <div className="w-full rounded border border-slate-800 bg-slate-950/40 px-4 py-3 text-sm font-semibold text-slate-300 flex items-center justify-between">
-                      <span>{estimate.complexity} Level Diagnostic</span>
-                      <span className={`h-2.5 w-2.5 rounded-full ${
-                        estimate.complexity === "Low" ? "bg-emerald-400" :
-                        estimate.complexity === "Medium" ? "bg-amber-400" : "bg-rose-500"
-                      }`}></span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Symptom Selection */}
+                {/* Step 2: Symptom */}
                 <div>
                   <label htmlFor="symptom-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    3. Primary Fault / Symptom Experienced
+                    2. Select Symptom / Fault
                   </label>
                   <select
                     id="symptom-select"
-                    value={selectedSymptom}
-                    onChange={(e) => setSelectedSymptom(e.target.value)}
-                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    value={selectedSymptomIdx}
+                    onChange={(e) => setSelectedSymptomIdx(parseInt(e.target.value))}
+                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
-                    {SYMPTOMS.map((s) => (
-                      <option key={s.name} value={s.name}>{s.name}</option>
+                    {activeEquip.symptoms.map((symptom, idx) => (
+                      <option key={idx} value={idx}>{symptom.name}</option>
                     ))}
                   </select>
                 </div>
 
-                {/* Live Estimator Output Panel */}
-                <div className="mt-8 rounded bg-slate-950 border border-slate-800 p-6 space-y-4">
+                {/* Streamlined Live Result Output */}
+                <div className="rounded bg-slate-950 border border-slate-800 p-5 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <span className="block text-[10px] font-bold tracking-widest text-amber-400 uppercase">Estimated Repair Cost</span>
-                      <div className="flex items-baseline mt-1 gap-1">
-                        <span className="text-3xl font-extrabold text-white font-sans">
-                          ₱{estimate.minPrice.toLocaleString()} - ₱{estimate.maxPrice.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-400 font-medium">ballpark</span>
-                      </div>
+                      <span className="block text-[9px] font-mono font-bold tracking-widest text-blue-400 uppercase">Estimated Range</span>
+                      <span className="block text-3xl font-extrabold text-white mt-1 font-sans">
+                        ₱{minPrice.toLocaleString()} - ₱{maxPrice.toLocaleString()}
+                      </span>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-300 font-medium">
-                        <Clock className="h-4 w-4 text-amber-400" />
-                        <span>Timeline: <strong>{estimate.duration}</strong></span>
+                    <div className="text-xs text-slate-300 space-y-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-4 w-4 text-blue-400" />
+                        <span>Timeline: <strong>{timeline}</strong></span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-300 font-medium">
-                        <Wrench className="h-4 w-4 text-amber-400" />
-                        <span>Diagnostics: <strong>Free</strong></span>
+                      <div className="flex items-center gap-1.5">
+                        <Wrench className="h-4 w-4 text-blue-400" />
+                        <span>Diagnostic Fee: <strong>₱0 (Free)</strong></span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 italic leading-normal border-t border-slate-800 pt-3">
-                    * This is a simulated baseline estimate for components and labor. Bringing the unit to the shop for inspection ensures 100% exact pricing.
+                  <p className="text-[10px] text-slate-400 italic border-t border-slate-850 pt-3 leading-normal">
+                    * This is a baseline price estimation. Tracing circuit level faults requires physically bringing the unit to our shop.
                   </p>
                 </div>
 
                 <button
-                  onClick={handleBook}
-                  className="w-full group flex items-center justify-center gap-2 rounded bg-amber-500 py-4 text-sm font-bold text-slate-900 hover:bg-amber-400 shadow-md transition-all duration-300 cursor-pointer"
+                  onClick={() => onNavigate("contact")}
+                  className="w-full group flex items-center justify-center gap-2 rounded bg-blue-600 py-3.5 text-xs font-bold text-white hover:bg-blue-500 transition-all duration-300 cursor-pointer uppercase tracking-wider"
                   id="calc-cta-book"
                 >
-                  Contact Renato for this Estimate
-                  <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  Contact Renato / Get Quote
+                  <ChevronRight className="h-4.5 w-4.5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
               </div>
@@ -260,7 +208,7 @@ export default function QuoteCalculator() {
           </div>
 
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
