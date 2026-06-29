@@ -83,8 +83,8 @@ export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
   const activeEquip = PRICE_DATABASE.find(e => e.id === selectedEquip) || PRICE_DATABASE[0];
 
   return (
-    <section className="py-16 sm:py-20 bg-slate-950 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+    <section className="py-16 sm:py-20 bg-white text-slate-800 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none"></div>
       
       <div className="relative mx-auto max-w-7xl px-4 lg:px-6">
         
@@ -92,28 +92,28 @@ export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
           
           {/* Descriptive Column */}
           <div className="lg:col-span-5 space-y-5">
-            <span className="text-xs font-bold tracking-widest text-blue-400 bg-blue-950 border border-blue-800 px-3 py-1.5 rounded">
+            <span className="text-xs font-bold tracking-widest text-blue-800 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded">
               Interactive Estimator
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-900">
               Instant Repair Cost Estimator
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm">
+            <p className="text-slate-600 leading-relaxed text-sm">
               We value transparent pricing. Select your appliance type and primary symptom below to get an instant, component-level repair cost estimation.
             </p>
 
-            <div className="space-y-4 pt-4 border-t border-slate-800">
-              <div className="flex items-start gap-3 text-xs text-slate-300">
-                <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <div className="flex items-start gap-3 text-xs text-slate-600">
+                <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-white font-bold block">No surprise fees</strong>
+                  <strong className="text-slate-900 font-bold block">No surprise fees</strong>
                   All cost estimates are ballpark ranges covering both parts and precision labor.
                 </div>
               </div>
-              <div className="flex items-start gap-3 text-xs text-slate-300">
-                <CheckCircle2 className="h-4.5 w-4.5 text-blue-400 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 text-xs text-slate-600">
+                <CheckCircle2 className="h-4.5 w-4.5 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-white font-bold block">100% Free diagnostics</strong>
+                  <strong className="text-slate-900 font-bold block">100% Free diagnostics</strong>
                   If you bring your unit to our shop, checking and tracing the fault is completely free.
                 </div>
               </div>
@@ -122,27 +122,27 @@ export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
 
           {/* Clean Calculator Card Column */}
           <div className="lg:col-span-7">
-            <div className="rounded border border-slate-800 bg-slate-900 p-6 sm:p-8 shadow-xl relative">
+            <div className="rounded border border-slate-200 bg-white p-6 sm:p-8 shadow-lg relative">
               <div className="absolute -top-3 -right-3 rounded bg-blue-600 px-3 py-1 text-[9px] font-mono font-bold tracking-wider text-white uppercase">
                 Free Diagnostics
               </div>
               
-              <div className="flex items-center gap-2.5 border-b border-slate-800 pb-4 mb-6">
-                <Sliders className="h-5 w-5 text-blue-400" />
-                <h3 className="text-base font-bold uppercase tracking-wider text-white">Select Your Options</h3>
+              <div className="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-6">
+                <Sliders className="h-5 w-5 text-blue-600" />
+                <h3 className="text-base font-bold uppercase tracking-wider text-slate-900">Select Your Options</h3>
               </div>
 
               <div className="space-y-6">
                 {/* Step 1: Equipment */}
                 <div>
-                  <label htmlFor="equip-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  <label htmlFor="equip-select" className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
                     1. Select Equipment Type
                   </label>
                   <select
                     id="equip-select"
                     value={selectedEquip}
                     onChange={handleEquipChange}
-                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
                     {PRICE_DATABASE.map((equip) => (
                       <option key={equip.id} value={equip.id}>{equip.name}</option>
@@ -152,14 +152,14 @@ export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
 
                 {/* Step 2: Symptom */}
                 <div>
-                  <label htmlFor="symptom-select" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  <label htmlFor="symptom-select" className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
                     2. Select Symptom / Fault
                   </label>
                   <select
                     id="symptom-select"
                     value={selectedSymptomIdx}
                     onChange={(e) => setSelectedSymptomIdx(parseInt(e.target.value))}
-                    className="w-full rounded border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-semibold text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
                     {activeEquip.symptoms.map((symptom, idx) => (
                       <option key={idx} value={idx}>{symptom.name}</option>
@@ -168,28 +168,28 @@ export default function QuoteCalculator({ onNavigate }: QuoteCalculatorProps) {
                 </div>
 
                 {/* Streamlined Live Result Output */}
-                <div className="rounded bg-slate-950 border border-slate-800 p-5 space-y-4">
+                <div className="rounded bg-blue-50/40 border border-blue-100/70 p-5 space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <span className="block text-[9px] font-mono font-bold tracking-widest text-blue-400 uppercase">Estimated Range</span>
-                      <span className="block text-3xl font-extrabold text-white mt-1 font-sans">
+                      <span className="block text-[9px] font-mono font-bold tracking-widest text-blue-600 uppercase">Estimated Range</span>
+                      <span className="block text-3xl font-extrabold text-slate-900 mt-1 font-sans">
                         ₱{minPrice.toLocaleString()} - ₱{maxPrice.toLocaleString()}
                       </span>
                     </div>
 
-                    <div className="text-xs text-slate-300 space-y-1.5">
+                    <div className="text-xs text-slate-700 space-y-1.5">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="h-4 w-4 text-blue-400" />
+                        <Clock className="h-4 w-4 text-blue-600" />
                         <span>Timeline: <strong>{timeline}</strong></span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Wrench className="h-4 w-4 text-blue-400" />
+                        <Wrench className="h-4 w-4 text-blue-600" />
                         <span>Diagnostic Fee: <strong>₱0 (Free)</strong></span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-[10px] text-slate-400 italic border-t border-slate-850 pt-3 leading-normal">
+                  <p className="text-[10px] text-slate-500 italic border-t border-blue-100/50 pt-3 leading-normal">
                     * This is a baseline price estimation. Tracing circuit level faults requires physically bringing the unit to our shop.
                   </p>
                 </div>
