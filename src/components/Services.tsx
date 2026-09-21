@@ -1,5 +1,8 @@
 import React from "react";
 import { Tv, Volume2, Mic, CheckCircle2 } from "lucide-react";
+import tvBoardRepairImg from "../assets/images/tv_board_repair_1789963891768.jpg";
+import soundSystemRepairImg from "../assets/images/sound_system_repair_1789963904556.jpg";
+import videokeSetupImg from "../assets/images/videoke_service_setup_1789963918892.jpg";
 
 interface ServicesProps {
   onNavigate: (page: string) => void;
@@ -11,6 +14,8 @@ export default function Services({ onNavigate }: ServicesProps) {
       id: "tv-board",
       title: "Smart TV & Board Repair",
       category: "Electronics",
+      image: tvBoardRepairImg,
+      alt: "Technician repairing Smart TV circuit board on workshop bench",
       description: "Expert board-level micro-soldering and restoration. We replace failed chips and transistors to save you from buying a brand new panel.",
       icon: Tv,
       price: "₱800",
@@ -25,6 +30,8 @@ export default function Services({ onNavigate }: ServicesProps) {
       id: "sound-system",
       title: "Professional Sound Systems",
       category: "Audio Tech",
+      image: soundSystemRepairImg,
+      alt: "Sound system amplifier and receiver circuit repair",
       description: "Precision tuning and component restoration for stereo receivers, vintage amplifiers, active mixing consoles, and subwoofers.",
       icon: Volume2,
       price: "₱1,200",
@@ -39,6 +46,8 @@ export default function Services({ onNavigate }: ServicesProps) {
       id: "videoke-services",
       title: "Videoke Rental & Upgrades",
       category: "Entertainment",
+      image: videokeSetupImg,
+      alt: "Videoke party sound machine rental and karaoke setup",
       description: "Heavy-duty Videoke machine rentals for local parties and events, plus custom cabinet wiring and digital songbook updates.",
       icon: Mic,
       price: "₱1,500",
@@ -52,7 +61,12 @@ export default function Services({ onNavigate }: ServicesProps) {
   ];
 
   return (
-    <section className="bg-slate-50 py-16 sm:py-20 relative">
+    <section id="services" className="bg-slate-50 py-16 sm:py-20 relative overflow-hidden backdrop-blur-md">
+      {/* Decorative blurred background aura spheres */}
+      <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-blue-500/[0.07] blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 -right-24 h-80 w-80 rounded-full bg-indigo-500/[0.06] blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 left-1/4 h-72 w-72 rounded-full bg-blue-400/[0.05] blur-2xl pointer-events-none" />
+
       <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none"></div>
       
       <div className="relative mx-auto max-w-7xl px-4 lg:px-6">
@@ -77,40 +91,64 @@ export default function Services({ onNavigate }: ServicesProps) {
             return (
               <div
                 key={service.id}
-                className="flex flex-col justify-between rounded border border-slate-200/80 bg-white shadow-sm hover:shadow-xl hover:border-blue-400 transition-all duration-300 overflow-hidden"
+                className="group flex flex-col justify-between rounded-none border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(37,99,235,1)] hover:border-blue-600 transition-all duration-300 overflow-hidden"
                 id={`service-card-${service.id}`}
               >
-                {/* Visual Accent Top Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 to-sky-500"></div>
+                {/* Square Edge Photo Showcase with Industrial Rough/Chiseled Frame */}
+                <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-slate-950 border-b-2 border-slate-900 rounded-none">
+                  <img
+                    src={service.image}
+                    alt={service.alt}
+                    loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={300}
+                    referrerPolicy="no-referrer"
+                    className="h-full w-full object-cover rounded-none transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  
+                  {/* Subtle Dark Vignette Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20 rounded-none pointer-events-none" />
 
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="rounded bg-slate-900 p-3 text-blue-400 shadow-sm">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded border bg-blue-50 text-blue-800 border-blue-200">
-                        {service.category}
-                      </span>
+                  {/* Technical Square Corner Marks / Rough Edges Accents */}
+                  <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-blue-400 rounded-none pointer-events-none" />
+                  <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-blue-400 rounded-none pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b-2 border-l-2 border-blue-400 rounded-none pointer-events-none" />
+                  <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b-2 border-r-2 border-blue-400 rounded-none pointer-events-none" />
+
+                  {/* Overlay Badge & Icon with Square Cut */}
+                  <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
+                    <span className="rounded-none bg-slate-900/95 text-blue-300 border border-slate-700 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider shadow-sm">
+                      {service.category}
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-3 left-3 z-10">
+                    <div className="rounded-none bg-blue-600 p-2 text-white shadow-md border border-blue-400/40">
+                      <Icon className="h-4 w-4" />
                     </div>
+                  </div>
+                </div>
 
-                    <h3 className="text-xl font-bold text-slate-900">
+                <div className="p-6 flex-1 flex flex-col justify-between rounded-none">
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {service.title}
                     </h3>
                     
-                    <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+                    <p className="mt-2 text-xs text-slate-600 leading-relaxed">
                       {service.description}
                     </p>
 
                     {/* Solutions List */}
-                    <div className="mt-5 space-y-2.5 border-t border-slate-100 pt-5">
-                      <h4 className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider font-sans">
+                    <div className="mt-5 space-y-2.5 border-t border-slate-150 pt-5">
+                      <h4 className="text-[10px] font-extrabold text-slate-900 uppercase tracking-wider font-mono">
                         Common Issues We Fix:
                       </h4>
                       <ul className="space-y-2">
                         {service.solutions.map((sol, index) => (
-                          <li key={index} className="flex items-start gap-2 text-xs text-slate-600 leading-normal">
-                            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                          <li key={index} className="flex items-start gap-2 text-xs text-slate-700 leading-normal">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                             <span>{sol}</span>
                           </li>
                         ))}
@@ -120,20 +158,14 @@ export default function Services({ onNavigate }: ServicesProps) {
 
                   {/* Horizontal Meta Info & Action */}
                   <div className="mt-6 pt-5 border-t border-slate-100">
-                    <div className="grid grid-cols-2 gap-4 mb-5 text-center bg-slate-50 rounded p-3">
-                      <div>
-                        <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest font-mono">Rates From</span>
-                        <span className="text-base font-extrabold text-slate-800">{service.price}</span>
-                      </div>
-                      <div>
-                        <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest font-mono">Timeline</span>
-                        <span className="text-sm font-bold text-slate-700">{service.turnaround}</span>
-                      </div>
+                    <div className="mb-5 flex items-center justify-between bg-slate-100/80 rounded-none border border-slate-200 p-3">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Turnaround</span>
+                      <span className="text-xs font-bold text-slate-800 font-mono">{service.turnaround}</span>
                     </div>
 
                     <button
                       onClick={() => onNavigate("contact")}
-                      className="w-full text-center rounded bg-slate-900 py-3 text-xs font-bold text-white hover:bg-blue-600 hover:text-white transition-all duration-300 uppercase tracking-wider cursor-pointer"
+                      className="w-full text-center rounded-none bg-slate-900 py-3 text-xs font-bold text-white hover:bg-blue-600 transition-all duration-300 uppercase tracking-wider cursor-pointer shadow-sm active:translate-y-0.5"
                       id={`btn-book-${service.id}`}
                     >
                       Inquire / Get Quote

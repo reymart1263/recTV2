@@ -6,8 +6,12 @@ export default function AboutOwner() {
   const [imageError, setImageError] = React.useState(false);
 
   return (
-    <section className="py-16 sm:py-20 bg-white relative">
-      <div className="mx-auto max-w-7xl px-4 lg:px-6">
+    <section id="owner" className="py-16 sm:py-20 bg-white relative overflow-hidden backdrop-blur-md">
+      {/* Decorative blurred background aura spheres */}
+      <div className="absolute -top-24 right-1/4 h-80 w-80 rounded-full bg-blue-400/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 left-10 h-80 w-80 rounded-full bg-indigo-300/10 blur-3xl pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 lg:px-6">
         
         {/* Simplified Header */}
         <div className="mx-auto max-w-3xl text-center mb-16">
@@ -35,6 +39,10 @@ export default function AboutOwner() {
                   <img
                     src={ownerImage}
                     alt="Renato E. Custodio - Repair Specialist"
+                    loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={400}
                     className="h-full w-full object-cover animate-fade-in"
                     referrerPolicy="no-referrer"
                     onError={() => setImageError(true)}

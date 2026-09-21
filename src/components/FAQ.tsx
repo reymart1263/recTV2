@@ -24,8 +24,12 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-16 sm:py-20 bg-white relative">
-      <div className="mx-auto max-w-3xl px-4 lg:px-6">
+    <section id="faq" className="py-16 sm:py-20 bg-white relative overflow-hidden backdrop-blur-md">
+      {/* Decorative blurred background aura spheres */}
+      <div className="absolute top-10 -left-20 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 -right-20 h-72 w-72 rounded-full bg-indigo-300/10 blur-3xl pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-3xl px-4 lg:px-6">
         
         {/* Simplified Header */}
         <div className="text-center mb-12">

@@ -9,7 +9,6 @@ interface HeaderProps {
 
 const navItems = [
   { id: "services", label: "Services" },
-  { id: "calculator", label: "Price Estimator" },
   { id: "owner", label: "About the Owner" },
   { id: "contact", label: "Where to Find Us" },
   { id: "faq", label: "FAQ" },
@@ -25,12 +24,12 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-4 border-blue-500 bg-slate-900 text-white shadow-md">
+    <header className="sticky top-0 z-50 w-full bg-white text-slate-900">
       {/* Upper Announcement Bar */}
-      <div className="bg-slate-950 text-white py-2 px-4 text-xs font-medium tracking-wide border-b border-slate-800">
+      <div className="bg-slate-50 text-slate-600 py-2 px-4 text-xs font-medium tracking-wide border-b border-slate-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
           <div className="flex items-center justify-center gap-4">
-            <a href="tel:+639499442851" className="flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors font-mono font-medium">
+            <a href="tel:+639499442851" className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors font-mono font-medium">
               <Phone className="h-3 w-3" />
               +63 (949) 944-2851
             </a>
@@ -48,8 +47,8 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
           whileTap={{ scale: 0.98 }}
         >
           <div>
-            <span className="block text-lg font-bold tracking-tight text-white leading-none group-hover:text-blue-400 transition-colors">recTV</span>
-            <span className="block text-[10px] font-bold tracking-widest text-blue-400 uppercase mt-0.5 group-hover:text-blue-300 transition-colors">Repair & Videoke Services</span>
+            <span className="block text-lg font-bold tracking-tight text-slate-900 leading-none group-hover:text-blue-600 transition-colors">recTV</span>
+            <span className="block text-[10px] font-bold tracking-widest text-blue-600 uppercase mt-0.5 group-hover:text-blue-700 transition-colors">Repair & Videoke Services</span>
           </div>
         </motion.button>
 
@@ -63,7 +62,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
                 onClick={() => handleNavClick(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
                 className={`relative px-4 py-2 text-sm font-semibold rounded transition-colors duration-300 cursor-pointer ${
-                  isActive ? "text-blue-400" : "text-slate-300 hover:text-white"
+                  isActive ? "text-blue-600" : "text-slate-600 hover:text-slate-900"
                 }`}
                 id={`link-${item.id}`}
               >
@@ -71,7 +70,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
                 {isActive && (
                   <motion.div
                     layoutId="active-nav-underline"
-                    className="absolute bottom-0 left-4 right-4 h-0.5 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                    className="absolute bottom-0 left-4 right-4 h-0.5 bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.4)]"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -80,7 +79,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
                 {hoveredTab === item.id && (
                   <motion.div
                     layoutId="hover-nav-capsule"
-                    className="absolute inset-0 bg-slate-800/60 rounded -z-10"
+                    className="absolute inset-0 bg-slate-100 rounded -z-10"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -100,7 +99,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
             href="https://www.facebook.com/renato.custodio2"
             target="_blank"
             rel="noreferrer"
-            className="rounded bg-slate-800 p-2.5 text-slate-300 hover:text-white hover:bg-blue-600 transition-all shadow-sm cursor-pointer"
+            className="rounded bg-slate-100 border border-slate-200 p-2.5 text-slate-600 hover:text-white hover:bg-blue-600 hover:border-blue-600 transition-all shadow-sm cursor-pointer"
             title="Facebook Page"
             id="header-facebook"
             whileHover={{ scale: 1.1, rotate: 3 }}
@@ -112,7 +111,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
             href="https://youtube.com"
             target="_blank"
             rel="noreferrer"
-            className="rounded bg-slate-800 p-2.5 text-slate-300 hover:text-white hover:bg-rose-600 transition-all shadow-sm cursor-pointer"
+            className="rounded bg-slate-100 border border-slate-200 p-2.5 text-slate-600 hover:text-white hover:bg-rose-600 hover:border-rose-600 transition-all shadow-sm cursor-pointer"
             title="YouTube Channel"
             id="header-youtube"
             whileHover={{ scale: 1.1, rotate: -3 }}
@@ -125,8 +124,10 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
         {/* Mobile Toggle */}
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="rounded-lg p-1.5 text-slate-300 hover:bg-slate-800 md:hidden transition-colors"
-          aria-label="Toggle menu"
+          className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 md:hidden transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center border border-slate-200"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav-panel"
           id="nav-mobile-toggle"
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -137,44 +138,45 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
+            id="mobile-nav-panel"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="border-t border-slate-800 bg-slate-900 overflow-hidden md:hidden shadow-lg text-white"
+            className="border-t border-slate-200 bg-white overflow-hidden md:hidden shadow-lg text-slate-900"
           >
             <div className="py-4 px-6 flex flex-col gap-4">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center text-left py-2 text-base font-semibold border-b border-slate-800/45 ${
-                    activePage === item.id ? "text-blue-400" : "text-slate-200"
+                  className={`flex items-center text-left py-2 text-base font-semibold border-b border-slate-100 ${
+                    activePage === item.id ? "text-blue-600 font-bold" : "text-slate-700 hover:text-blue-600"
                   }`}
                   id={`m-link-${item.id}`}
                 >
                   {item.label}
                 </button>
               ))}
-              <div className="flex items-center justify-center gap-4 mt-2 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-center gap-4 mt-2 pt-4 border-t border-slate-200">
                 <a
                   href="https://www.facebook.com/renato.custodio2"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 rounded bg-slate-800 border border-slate-700 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                  className="flex items-center gap-2 rounded bg-slate-100 border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all cursor-pointer"
                   id="m-header-facebook"
                 >
-                  <Facebook className="h-4 w-4 text-blue-500" />
+                  <Facebook className="h-4 w-4 text-blue-600" />
                   Facebook
                 </a>
                 <a
                   href="https://youtube.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 rounded bg-slate-800 border border-slate-700 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer"
+                  className="flex items-center gap-2 rounded bg-slate-100 border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-rose-600 hover:text-white hover:border-rose-600 transition-all cursor-pointer"
                   id="m-header-youtube"
                 >
-                  <Youtube className="h-4 w-4 text-rose-500" />
+                  <Youtube className="h-4 w-4 text-rose-600" />
                   YouTube
                 </a>
               </div>

@@ -3,10 +3,14 @@ import { MapPin, Clock, Landmark, Facebook, Youtube } from "lucide-react";
 
 export default function LocationContact() {
   return (
-    <section id="contact" className="py-20 bg-slate-50 relative">
+    <section id="contact" className="py-20 bg-slate-50 relative overflow-hidden backdrop-blur-md">
+      {/* Decorative blurred background aura spheres */}
+      <div className="absolute -top-28 -right-28 h-96 w-96 rounded-full bg-blue-500/[0.06] blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-28 -left-28 h-96 w-96 rounded-full bg-indigo-500/[0.06] blur-3xl pointer-events-none" />
+
       <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none"></div>
 
-      <div className="relative mx-auto max-w-7xl px-4 lg:px-6">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 lg:px-6">
         
         {/* Section Heading */}
         <div className="mx-auto max-w-3xl text-center mb-16">

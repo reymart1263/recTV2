@@ -1,6 +1,6 @@
 {
-  "name": "Electronics Repair & Videoke Services",
-  "description": "Expert repair services for TV & boards, professional sound systems, and videoke equipment, featuring service details, location, and about the owner.",
+  "name": "recTV – Electronics Repair & Videoke Services",
+  "description": "Expert repair services for Smart TV & boards, professional sound systems, amplifiers, and videoke equipment in Nagpayong, Pasig City.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
