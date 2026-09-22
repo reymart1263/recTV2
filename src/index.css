@@ -11,4 +11,46 @@
     background-image: radial-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px);
     background-size: 24px 24px;
   }
+
+  /* Neomorphism Utilities */
+  .neumorph-flat {
+    background: #ffffff;
+    box-shadow: 8px 8px 18px rgba(100, 116, 139, 0.12), -8px -8px 18px rgba(255, 255, 255, 0.95);
+  }
+
+  .neumorph-flat-hover {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .neumorph-flat-hover:hover {
+    box-shadow: 12px 12px 24px rgba(100, 116, 139, 0.16), -12px -12px 24px rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+  }
+  .neumorph-flat-hover:active {
+    box-shadow: inset 4px 4px 8px rgba(100, 116, 139, 0.15), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+    transform: translateY(0);
+  }
+
+  .neumorph-pill {
+    background: #ffffff;
+    box-shadow: 5px 5px 12px rgba(15, 23, 42, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+  }
+  .neumorph-pill:hover {
+    box-shadow: 7px 7px 16px rgba(15, 23, 42, 0.14), -7px -7px 16px rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+  }
+  .neumorph-pill:active, .neumorph-pill.active {
+    box-shadow: inset 3px 3px 6px rgba(15, 23, 42, 0.12), inset -3px -3px 6px rgba(255, 255, 255, 0.85);
+    transform: translateY(0);
+  }
+
+  .neumorph-inset {
+    background: #f8fafc;
+    box-shadow: inset 4px 4px 8px rgba(100, 116, 139, 0.12), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+  }
+
+  .neumorph-glow {
+    box-shadow: 0 0 25px -3px rgba(168, 85, 247, 0.25), 8px 8px 20px rgba(100, 116, 139, 0.12), -8px -8px 20px rgba(255, 255, 255, 0.9);
+  }
 }
+

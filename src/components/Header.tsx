@@ -24,9 +24,9 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white text-slate-900">
+    <header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-md text-slate-900 border-b border-slate-200/40 transition-colors duration-200">
       {/* Upper Announcement Bar */}
-      <div className="bg-slate-50 text-slate-600 py-2 px-4 text-xs font-medium tracking-wide border-b border-slate-200">
+      <div className="bg-transparent text-slate-600 py-2 px-4 text-xs font-medium tracking-wide border-b border-slate-200/40">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
           <div className="flex items-center justify-center gap-4">
             <a href="tel:+639499442851" className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors font-mono font-medium">
@@ -143,7 +143,7 @@ export default function Header({ activePage, onNavigate }: HeaderProps) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="border-t border-slate-200 bg-white overflow-hidden md:hidden shadow-lg text-slate-900"
+            className="border-t border-slate-200/50 bg-white/95 backdrop-blur-md overflow-hidden md:hidden shadow-lg text-slate-900"
           >
             <div className="py-4 px-6 flex flex-col gap-4">
               {navItems.map((item) => (
